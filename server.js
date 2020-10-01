@@ -1,15 +1,16 @@
 const AWS = require("aws-sdk"),
   { Readable } = require("readable-stream");
 const { response } = require("express");
-const bodyParser = require("body-parser");
+
+var Promise = require("promise");
 
 const express = require("express");
-var Promise = require("promise");
-const API_PORT = process.env.PORT || 5000;
 const app = express();
 const router = express.Router();
 const CSV = require("csv-string");
 const path = require("path");
+const bodyParser = require("body-parser");
+const API_PORT = process.env.PORT || 5000;
 
 const s3 = new AWS.S3({
   region: "ap-southeast-2",
@@ -23,6 +24,7 @@ app.get("/api/hello", (req, res) => {
 });
 
 app.post("/api/test", (req, res) => {
+  console.log(req.body);
   s3SelectQuery = (query) => {
     return new Promise((resolve, reject) => {
       var params = {
@@ -53,6 +55,7 @@ app.post("/api/test", (req, res) => {
           data.Payload.on("data", (data) => {
             if (data.Records && data.Records.Payload) {
               let str = Buffer.from(data.Records.Payload);
+              // Json Format conversion
               //   let json = JSON.stringify(str);
               //   let bufferOriginal = Buffer.from(JSON.parse(json).data);
               //   console.log(bufferOriginal.toString("utf8"));
@@ -79,7 +82,7 @@ app.post("/api/test", (req, res) => {
 
 app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
 
-// Use it for deployment
+// Use it for production
 if (process.env.NODE_ENV === "production") {
   // Serve any static files
   app.use(express.static(path.join(__dirname, "client/build")));

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { Bar } from "react-chartjs-2";
-import "bootstrap/dist/css/bootstrap.min.css";
-
-import "./App.css";
 import Header from "./components/layout/Header";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+
 import About from "./components/pages/About";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
 
 class App extends Component {
   state = {
@@ -28,7 +28,7 @@ class App extends Component {
       ],
     },
   };
-
+  // Testing the API
   //componentDidMount() {
   // this.callApi()
   //   .then((res) => {
